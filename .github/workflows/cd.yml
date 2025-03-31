@@ -20,3 +20,27 @@ jobs:
             
     - name: build prod
       run: ./scripts/buildprod.sh
+
+  setup-gcloud:
+    name: setup-gcloud
+    runs-on: ubuntu-latest
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    steps:
+    - id: 'auth'
+      uses: 'google-github-actions/auth@v2'
+      with:
+        credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+
+    - name: 'Set up Cloud SDK'
+      uses: 'google-github-actions/setup-gcloud@v2'
+      with:
+        version: '>= 363.0.0'
+
+    - name: 'Use gcloud CLI'
+      run: 'gcloud info'
+
+    - name: 'build and push docker image'
+      run: 'gcloud builds submit --tag us-central1-docker.pkg.dev/civic-karma-455419-v3/notely-ar-repo/notely:latest'
