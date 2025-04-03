@@ -9,8 +9,8 @@ jobs:
     name: Deploy
     runs-on: ubuntu-latest
 
-    env:
-      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+    # env:
+    #   DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
     steps:
       - name: Check out code
@@ -38,8 +38,12 @@ jobs:
       - name: Build and push Docker image
         run: gcloud builds submit --tag us-central1-docker.pkg.dev/civic-karma-455419-v3/notely-ar-repo/notely:latest .
       
-      - name: Install goose
-        run: go install github.com/pressly/goose/v3/cmd/goose@latest
+      # lol whoops did it early
+      # - name: Install goose
+      #   run: go install github.com/pressly/goose/v3/cmd/goose@latest
 
-      - name: Run migrations
-        run: ./scripts/migrateup.sh
+      # - name: Run migrations
+      #   run: ./scripts/migrateup.sh
+
+      - name: Deploy to Cloud Run
+        run: gcloud run deploy notely --image us-central1-docker.pkg.dev/civic-karma-455419-v3/notely-ar-repo/notely:latest --region REGION --allow-unauthenticated --project PROJECT_ID --max-instances=4
