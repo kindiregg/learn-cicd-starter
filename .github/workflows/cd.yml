@@ -9,6 +9,7 @@ jobs:
     name: Deploy
     runs-on: ubuntu-latest
 
+    # okay dont make this in github i guess
     env:
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
